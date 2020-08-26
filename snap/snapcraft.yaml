@@ -1,0 +1,29 @@
+name: lntree
+base: core18
+version: 0.1.0
+summary: A tool to symlink the leaves of a directory tree to a certain path
+description: |
+  ```
+  lntree SRC DST
+  ```
+
+  where 
+  * SRC can be a file, a dir or a group of them (metacharacters) where dst will point to
+  * DST is the path to a folder that is the root of the tree whose leaves will be linked to src
+
+grade: devel # must be 'stable' to release into candidate/stable channels
+confinement: devmode # use 'strict' once you have the right plugs and slots
+
+parts:
+  lntree:
+    plugin: python
+    python-version: python3
+    source: .
+
+apps:
+  lntree:
+    environment:
+      LC_ALL: C.UTF-8
+      LANG: en_US.UTF-8
+    command: bin/lntree
+    plugs: [home]
