@@ -1,5 +1,6 @@
 name: lntree
 base: core18
+type: app
 version: 0.1.0
 summary: A tool to symlink the leaves of a directory tree to a certain path
 description: |
@@ -11,8 +12,8 @@ description: |
   * SRC can be a file, a dir or a group of them (metacharacters) where dst will point to
   * DST is the path to a folder that is the root of the tree whose leaves will be linked to src
 
-grade: devel # must be 'stable' to release into candidate/stable channels
-confinement: devmode # use 'strict' once you have the right plugs and slots
+grade: stable # must be 'stable' to release into candidate/stable channels
+confinement: strict # use 'strict' once you have the right plugs and slots
 
 parts:
   lntree:

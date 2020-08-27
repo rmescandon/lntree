@@ -86,7 +86,3 @@ def link_tree(src, dst):
             ln_src = os.path.relpath(src_path, normalize(current))
             ln_dst = os.path.join(current, i)
             os.symlink(ln_src, ln_dst)
-
-
-if __name__ == '__main__':
-    link_tree()

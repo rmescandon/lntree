@@ -29,7 +29,7 @@ setuptools.setup(
     install_requires=install_requirements,
     packages=setuptools.find_packages(),
     platforms='linux',
-    entry_points={'console_scripts': ['lntree=lntree:link_tree']},
+    entry_points={'console_scripts': ['lntree=lntree.lntree:link_tree']},
     classifiers=[
         'Programming Language :: Python :: 3.6',
         'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)',
