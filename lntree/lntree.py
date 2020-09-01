@@ -32,6 +32,14 @@ def _split_and_map(paths):
     m = {}
     for p in paths:
         head, tail = os.path.split(p)
+
+        if tail == '.':
+            continue
+        if tail == '..':
+            continue
+        if tail == '*':
+            continue
+
         m[tail] = head
     return m
 
@@ -45,6 +53,13 @@ def _is_leaf(subfolders, ids):
     return True
 
 
+def _ids_linked(subfolders, ids):
+    '''Returns the list of sources in subfolders'''
+    for i in ids:
+        if i in subfolders:
+            yield i
+
+
 def _ids_not_linked(subfolders, ids):
     '''Returns the list of sources not in subfolders'''
     for i in ids:
@@ -55,7 +70,8 @@ def _ids_not_linked(subfolders, ids):
 @click.command(context_settings=CONTEXT_SETTINGS)
 @click.argument('src', nargs=-1)
 @click.argument('dst')
-def link_tree(src, dst):
+@click.option('--clear/--no-clear', default=False)
+def link_tree(src, dst, clear):
     '''
     Creates symlinks in all leaves in the dst tree to the src.
 
@@ -69,20 +85,33 @@ def link_tree(src, dst):
     dst = normalize(dst)
 
     if not os.path.isdir(dst):
-        raise Exception('destination must be a folder')
+        raise Exception(f'destination \'{dst}\' must be a folder')
 
     m = _split_and_map(src)
     ids = m.keys()
 
-    for current, subdirs, _ in os.walk(dst):
+    for current, subdirs, aa in os.walk(dst):
         if not _is_leaf(subdirs, ids):
             continue
 
-        # Obtain for current leaf the sources still not linked
-        not_linked_ids = _ids_not_linked(subdirs, ids)
-        for i in not_linked_ids:
+        # Obtain already linked sources or still not linked depending if
+        # linking or unlinking
+        if clear:
+            ln_ids = _ids_linked(subdirs, ids)
+        else:
+            ln_ids = _ids_not_linked(subdirs, ids)
+
+        for i in ln_ids:
             src_base_path = m[i]
             src_path = os.path.join(src_base_path, i)
             ln_src = os.path.relpath(src_path, normalize(current))
             ln_dst = os.path.join(current, i)
-            os.symlink(ln_src, ln_dst)
+
+            if clear:
+                os.unlink(ln_dst)
+            else:
+                os.symlink(ln_src, ln_dst)
+
+
+if __name__ == '__main__':
+    link_tree()
