@@ -31,4 +31,4 @@ CMD ["flake8", "./lntree/lntree.py"]
 EOF
 
 docker build -f Dockerfile -t lntree .
-docker run --rm lntree
+docker run --rm -v /var/run/docker.sock:/var/run/docker.sock lntree
