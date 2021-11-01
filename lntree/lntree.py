@@ -17,7 +17,6 @@
 
 import click
 import os
-import sys
 
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
 
